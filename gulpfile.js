@@ -17,7 +17,7 @@ var gulp = require('gulp')
 				,output_folder : "css/"
 			}
 			,js : {
-				input_folder : "['js/lib/*.js','js/htmls/*.js']"
+				input_folder : ['js/lib/*.js','js/htmls/*.js']
 				,output_name : "dist.js"
 				,output_folder : "js/min/"
 			}
@@ -39,12 +39,12 @@ var gulp = require('gulp')
 		}
 	}
 gulp.task('project_tmod',function(url,config){
-	return gulp.src(config.baseUrl+config.input_folder)
+	return gulp.src(url + "tmod/" +config.input_folder)
 		.pipe(tmodjs({
 			runtime : "template.min.js"
-			,templateBase : config.baseUrl+"tpl"
-			,helpers : config.baseUrl + "myHelp.js"
-			,syntax: config.baseUrl + "template-syntax.js"
+			,templateBase : url + "tmod/" +"tpl"
+			,helpers : url + "tmod/" + "myHelp.js"
+			,syntax: url + "tmod/" + "template-syntax.js"
 			,charset: "utf-8"
 			,escape: true
 			,compress: true
@@ -59,7 +59,12 @@ gulp.task('project_tmod',function(url,config){
 		.pipe(gulp.dest(url+config.output_folder));
 })
 gulp.task("project_javascripts",function(url,config){
-	return gulp.src(url+config.input_folder)
+	var input = [];
+	for(var i=0;i<config.input_folder.length;i++){
+		input.push(url+config.input_folder[i]);
+	}
+	console.log(input,config);
+	return gulp.src(input)
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(concat(config.output_name))
 		.pipe(rename(function(path){
@@ -158,7 +163,6 @@ gulp.task('project',function(_projectName){
 	}else{
 		project_name = getProjectName("fileurl");
 	}
-	console.log("the name is ...",arguments,project_name);
 	gulp.tasks["project_javascripts"].fn(baseUrl[project_name],config[project_name].js);
 	gulp.tasks["project_scss"].fn(baseUrl[project_name],config[project_name].scss);
 	gulp.tasks["project_tmod"].fn(baseUrl[project_name],config[project_name].tmod);
