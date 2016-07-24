@@ -9,6 +9,7 @@ var gulp = require('gulp')
 	,rename = require("gulp-rename")
 	,replace = require("gulp-replace")
 	,sourcemaps = require('gulp-sourcemaps')
+	,watch = require('gulp-watch')
 	,baseUrl = require("./config.js")
 	,config = {
 		mogo : {
@@ -27,7 +28,7 @@ var gulp = require('gulp')
 				,output_folder : "js/min"
 			}
 			,watch : {
-				watchList : ["tmod/tpl/**/*.html","tmod/myHelp.js","scss/**/*.scss","js/lib/*.js","js/htmls/**/*.js"]
+				watchList : ["tmod/tpl/**/*.*","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/htmls/**/*.*"]
 				,callbackList : [
 					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo" }
 					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo" }
@@ -148,14 +149,29 @@ gulp.task('myWatch',function(){
 		_watch_config.watchList[i] = baseUrl[project_name]+ _watch_config.watchList[i];
 	}
 	console.log("...watch list ", _watch_config,baseUrl);
-	gulp.watch(_watch_config.watchList,function(e){
+	return watch(_watch_config.watchList,function(e){
+		console.log("the event infos iss.....",e.event,e.history);
 		for(var val of _watch_config.callbackList){
 			if(val.key.test(e.path)){
 				gulp.tasks[val.callback].fn(val.params);
 				break;
 			}
 		}
-	});
+	})
+	/*
+	 *gulp.watch(_watch_config.watchList,{
+	 *    ignoreInitial:false
+	 *    ,events : ['add', 'addDir', 'change' ,'unlink']
+	 *},function(e){
+	 *    console.log("the type is.....",e.type);
+	 *    for(var val of _watch_config.callbackList){
+	 *        if(val.key.test(e.path)){
+	 *            gulp.tasks[val.callback].fn(val.params);
+	 *            break;
+	 *        }
+	 *    }
+	 *});
+	 */
 })
 gulp.task('project',function(_projectName){ 
 	if(_projectName && !(_projectName instanceof Function)){
