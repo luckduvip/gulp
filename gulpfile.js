@@ -64,7 +64,6 @@ gulp.task("project_javascripts",function(url,config){
 	for(var i=0;i<config.input_folder.length;i++){
 		input.push(url+config.input_folder[i]);
 	}
-	console.log(input,config);
 	return gulp.src(input)
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(concat(config.output_name))
@@ -72,6 +71,11 @@ gulp.task("project_javascripts",function(url,config){
 			path.extname = ".min.js";
 		}))
 		.pipe(uglify())
+		.on("error",function(err){
+			console.error("-----------------------------------------------------------uglify error",err.message,"------------------------------------------------------------------------------");
+
+			this.end();
+		})
 		.pipe(sourcemaps.write('maps'))
 		.pipe(gulp.dest(url+config.output_folder));
 })
@@ -87,7 +91,9 @@ gulp.task("project_scss",function(url,config){
 })
 gulp.task("uglifyFile",function(){
 	var url = getProjectName("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
-	console.log(url,output);
+	/*
+	 *console.log(url,output);
+	 */
 	return gulp.src(url)
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(uglify())
@@ -133,7 +139,9 @@ gulp.task("uglify",function(){
 })
 gulp.task("sassFile",function(){
 	var url = getProjectName("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
-	console.log(url,output);
+	/*
+	 *console.log(url,output);
+	 */
 	return gulp.src(url)
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(sass({outputStyle:'compressed'}).on('error',sass.logError))
@@ -148,7 +156,9 @@ gulp.task('myWatch',function(){
 	for(var i =0;i<_watch_config.watchList.length;i++){
 		_watch_config.watchList[i] = baseUrl[project_name]+ _watch_config.watchList[i];
 	}
-	console.log("...watch list ", _watch_config,baseUrl);
+	/*
+	 *console.log("...watch list ", _watch_config,baseUrl);
+	 */
 	return watch(_watch_config.watchList,function(e){
 		console.log("the event infos iss.....",e.event,e.history);
 		for(var val of _watch_config.callbackList){
@@ -158,20 +168,6 @@ gulp.task('myWatch',function(){
 			}
 		}
 	})
-	/*
-	 *gulp.watch(_watch_config.watchList,{
-	 *    ignoreInitial:false
-	 *    ,events : ['add', 'addDir', 'change' ,'unlink']
-	 *},function(e){
-	 *    console.log("the type is.....",e.type);
-	 *    for(var val of _watch_config.callbackList){
-	 *        if(val.key.test(e.path)){
-	 *            gulp.tasks[val.callback].fn(val.params);
-	 *            break;
-	 *        }
-	 *    }
-	 *});
-	 */
 })
 gulp.task('project',function(_projectName){ 
 	if(_projectName && !(_projectName instanceof Function)){
