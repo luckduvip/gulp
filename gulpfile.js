@@ -139,9 +139,6 @@ gulp.task("uglify",function(){
 })
 gulp.task("sassFile",function(){
 	var url = getProjectName("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
-	/*
-	 *console.log(url,output);
-	 */
 	return gulp.src(url)
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(sass({outputStyle:'compressed'}).on('error',sass.logError))
@@ -156,11 +153,8 @@ gulp.task('myWatch',function(){
 	for(var i =0;i<_watch_config.watchList.length;i++){
 		_watch_config.watchList[i] = baseUrl[project_name]+ _watch_config.watchList[i];
 	}
-	/*
-	 *console.log("...watch list ", _watch_config,baseUrl);
-	 */
 	return watch(_watch_config.watchList,function(e){
-		console.log("the event infos iss.....",e.event,e.history);
+		console.log("the event infos iss.....",e.event,e.history,"the time is =====",new Date().toJSON());
 		for(var val of _watch_config.callbackList){
 			if(val.key.test(e.path)){
 				gulp.tasks[val.callback].fn(val.params);
