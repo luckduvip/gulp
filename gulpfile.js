@@ -39,6 +39,33 @@ var gulp = require('gulp')
 				]
 			}
 		}
+		,mogo_h5 : {
+			scss : {
+				input_folder : "scss/base.scss"
+				,output_folder : "css/"
+			}
+			,js : {
+				input_folder : ['js/lib/*.js','js/tools/*.js','js/htmls/*.js']
+				,output_name : "dist.js"
+				,output_folder : "js/min/"
+			}
+			,tmod : {
+				baseUrl : "/Users/luckduvip/webapps/mogo/mogo/Public/tmod/"
+				,input_folder : "tpl/**/*.html"
+				,output_folder : "js/min"
+			}
+			,watch : {
+				watchList : ["tmod/tpl/**/*.*","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
+				,callbackList : [
+					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo" }
+					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo" }
+					,{ key : /scss\/[\w_]+\.scss/i , callback : "project" , params : "mogo" }
+					,{ key : /js\/lib\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
+					,{ key : /js\/htmls\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
+					,{ key : /js\/tools\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
+				]
+			}
+		}
 	}
 gulp.task('project_tmod',function(url,config){
 	return gulp.src(url + "tmod/" +config.input_folder)
