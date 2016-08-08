@@ -23,8 +23,7 @@ var gulp = require('gulp')
 				,output_folder : "js/min/"
 			}
 			,tmod : {
-				baseUrl : "/Users/luckduvip/webapps/mogo/mogo/Public/tmod/"
-				,input_folder : "tpl/**/*.html"
+				input_folder : "tpl/**/*.html"
 				,output_folder : "js/min"
 			}
 			,watch : {
@@ -50,19 +49,18 @@ var gulp = require('gulp')
 				,output_folder : "js/min/"
 			}
 			,tmod : {
-				baseUrl : "/Users/luckduvip/webapps/mogo/mogo/Public/tmod/"
-				,input_folder : "tpl/**/*.html"
+				input_folder : "tpl/**/*.html"
 				,output_folder : "js/min"
 			}
 			,watch : {
 				watchList : ["tmod/tpl/**/*.*","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
 				,callbackList : [
-					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo" }
-					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo" }
-					,{ key : /scss\/[\w_]+\.scss/i , callback : "project" , params : "mogo" }
-					,{ key : /js\/lib\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
-					,{ key : /js\/htmls\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
-					,{ key : /js\/tools\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
+					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo_h5" }
+					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo_h5" }
+					,{ key : /scss\/[\w_]+\.scss/i , callback : "project" , params : "mogo_h5" }
+					,{ key : /js\/lib\/[\w_]+\.js/i , callback : "project" , params : "mogo_h5" }
+					,{ key : /js\/htmls\/[\w_]+\.js/i , callback : "project" , params : "mogo_h5" }
+					,{ key : /js\/tools\/[\w_]+\.js/i , callback : "project" , params : "mogo_h5" }
 				]
 			}
 		}
@@ -182,7 +180,7 @@ gulp.task('myWatch',function(){
 		_watch_config.watchList[i] = baseUrl[project_name]+ _watch_config.watchList[i];
 	}
 	return watch(_watch_config.watchList,function(e){
-		console.log("the event infos iss.....",e.event,e.history,"the time is =====",new Date().toJSON());
+		console.log("the event infos iss.....",e.event,e.history,"the time is =====",new Date().toLocaleString());
 		for(var val of _watch_config.callbackList){
 			if(val.key.test(e.path)){
 				gulp.tasks[val.callback].fn(val.params);
