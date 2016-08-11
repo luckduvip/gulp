@@ -11,6 +11,7 @@ var gulp = require('gulp')
 	,sourcemaps = require('gulp-sourcemaps')
 	,watch = require('gulp-watch')
 	,baseUrl = require("./config.js")
+	,jshint = require("gulp-jshint")
 	,config = {
 		mogo : {
 			scss : {
@@ -65,6 +66,20 @@ var gulp = require('gulp')
 			}
 		}
 	}
+gulp.task("project_sign_jshint",function(input){
+	return gulp.src(input)
+		.pipe(jshint(".jshintrc"))
+		.pipe(jshint.reporter('default'));
+})
+gulp.task("project_jshint",function(url,config){
+	var input = [];
+	for(var i=0;i<config.input_folder.length;i++){
+		input.push(url+config.input_folder[i]);
+	}
+	return gulp.src(input)
+		.pipe(jshint(".jshintrc"))
+		.pipe(jshint.reporter('default'));
+})
 gulp.task('project_tmod',function(url,config){
 	return gulp.src(url + "tmod/" +config.input_folder)
 		.pipe(tmodjs({
@@ -181,6 +196,7 @@ gulp.task('myWatch',function(){
 	}
 	return watch(_watch_config.watchList,function(e){
 		console.log("the event infos iss.....",e.event,e.history,"the time is =====",new Date().toLocaleString());
+		gulp.tasks["project_sign_jshint"].fn(e.history);
 		for(var val of _watch_config.callbackList){
 			if(val.key.test(e.path)){
 				gulp.tasks[val.callback].fn(val.params);
@@ -189,12 +205,20 @@ gulp.task('myWatch',function(){
 		}
 	})
 })
+gulp.task('_jshint',function(_projectName){ 
+	var project_name = getProjectName("fileurl");
+	console.log(project_name);
+	gulp.tasks["project_jshint"].fn(baseUrl[project_name],config[project_name].js);
+})
 gulp.task('project',function(_projectName){ 
 	if(_projectName && !(_projectName instanceof Function)){
 		var project_name = _projectName;
 	}else{
 		project_name = getProjectName("fileurl");
 	}
+	/*
+	 *gulp.tasks["project_jshint"].fn(baseUrl[project_name],config[project_name].js);
+	 */
 	gulp.tasks["project_javascripts"].fn(baseUrl[project_name],config[project_name].js);
 	gulp.tasks["project_scss"].fn(baseUrl[project_name],config[project_name].scss);
 	gulp.tasks["project_tmod"].fn(baseUrl[project_name],config[project_name].tmod);
