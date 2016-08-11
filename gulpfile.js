@@ -196,7 +196,9 @@ gulp.task('myWatch',function(){
 	}
 	return watch(_watch_config.watchList,function(e){
 		console.log("the event infos iss.....",e.event,e.history,"the time is =====",new Date().toLocaleString());
-		gulp.tasks["project_sign_jshint"].fn(e.history);
+		if(/\.js$/.test(e.history.join(""))){
+			gulp.tasks["project_sign_jshint"].fn(e.history);
+		}
 		for(var val of _watch_config.callbackList){
 			if(val.key.test(e.path)){
 				gulp.tasks[val.callback].fn(val.params);
