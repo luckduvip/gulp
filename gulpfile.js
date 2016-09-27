@@ -13,6 +13,32 @@ var gulp = require('gulp')
 	,baseUrl = require("./config.js")
 	,jshint = require("gulp-jshint")
 	,config = {
+		mogo12 : {
+			scss : {
+				input_folder : "scss/base.scss"
+				,output_folder : "css/"
+			}
+			,js : {
+				input_folder : ['js/lib/*.js','js/tools/*.js','js/htmls/*.js']
+				,output_name : "dist.js"
+				,output_folder : "js/min/"
+			}
+			,tmod : {
+				input_folder : "tpl/**/*.html"
+				,output_folder : "js/min"
+			}
+			,watch : {
+				watchList : ["tmod/tpl/**/*.html","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
+				,callbackList : [
+					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo12" }
+					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo12" }
+					,{ key : /scss\/[\w_]+\.scss/i , callback : "project" , params : "mogo12" }
+					,{ key : /js\/lib\/[\w_]+\.js/i , callback : "project" , params : "mogo12" }
+					,{ key : /js\/htmls\/[\w_]+\.js/i , callback : "project" , params : "mogo12" }
+					,{ key : /js\/tools\/[\w_]+\.js/i , callback : "project" , params : "mogo12" }
+				]
+			}
+		},
 		mogo : {
 			scss : {
 				input_folder : "scss/base.scss"
@@ -38,8 +64,8 @@ var gulp = require('gulp')
 					,{ key : /js\/tools\/[\w_]+\.js/i , callback : "project" , params : "mogo" }
 				]
 			}
-		}
-		,mogo_h5 : {
+		},
+		mogo_h5 : {
 			scss : {
 				input_folder : "scss/base.scss"
 				,output_folder : "css/"
