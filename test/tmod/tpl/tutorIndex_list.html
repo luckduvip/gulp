@@ -1,0 +1,18 @@
+{each list as val key}
+<dd idx="{key}">
+<a href="/H5/User/tDetailIndex/tutor_id/{val.tutor_id}" class="">
+	<img src="/Public/images/h5/png/dd_bg.jpg" _src="{val.img_url}" class="bg lazyload" width="100%"/>
+	<div class="sd"></div>
+	<div class="location_icon">{val.teach_area}</div>
+	<div class="info_area">
+		<div class="tutor_head">
+			<img src="/Public/images/h5/png/user_icon.jpg" _src="{val.img_url}" class="lazyload" width="80"/>
+		</div>
+		<img src="/Public/images/h5/png/icon_2.png" class="user_icon" width="44"/>
+		<p>
+		{val.user_name}<br/><span>{val.title}/{val.work_experience}年经验</span><span>{val.teach_num}人约见</span>
+		</p>
+	</div>
+</a>
+</dd>
+{/each}

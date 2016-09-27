@@ -1,0 +1,43 @@
+{each list as val key}
+<dd>
+	<div class="dd_tit">
+		<span class="status">状态：{getStatus(val.status,type)}</span>
+		<span class="name">{if type == "1"}{val.stu_name}{else}{val.tutor_name}{/if}</span>的约见
+	</div>
+	<p>订单号：{val.order_no}<br/>提交时间:<span>{handleDate(val.add_time)}</span></p>
+	<div class="price">
+		{if val.status == 0}
+			{if type == 1}
+			<a data-id="{val.order_id}" data-mobile="{val.tutor_mobile}" href="/H5/Order/tConfirmIndex/oid/{val.order_id}" data-val="{val.status}" class="">去确定</a>
+			{else}
+				<a data-id="{val.order_id}" data-status="8" data-mobile="{val.tutor_mobile}" href="javascript:;" data-val="{val.status}" class="order_btn">取消</a>
+			{/if}
+		{else if val.status == 1}
+			{if type == 1}
+				<a data-id="{val.order_id}" data-mobile="{val.tutor_mobile}" href="javascript:;" data-status="9" data-val="{val.status}" class="order_btn">取消约见</a>
+			{else}
+			<a data-id="{val.order_id}" data-mobile="{val.stu_mobile}" href="javascript:;" data-status="8" class="order_btn">取消</a><a data-id="{val.order_id}" data-mobile="{val.stu_mobile}" href="/H5/Order/stuConIndex/oid/{val.order_id}" data-status="8" class="">支付</a>
+			{/if}
+		{else if val.status == 2}
+		{else if val.status == 3}
+			{if type != 1}
+			<a data-id="{val.order_id}" data-mobile="{val.stu_mobile}" href="javascript:;" data-status="4" class="order_btn">退款</a><a data-id="{val.order_id}" data-mobile="{val.stu_mobile}" href="javascript:;" data-status="6" class="order_btn">约见完成</a>
+			{/if}
+		{else if val.status == 4}
+			{if type == 1}
+				<a data-id="{val.order_id}" data-mobile={val.tutor_mobile}" data-status="10" href="javascript:;" data-val="{val.status}" class="order_btn">确认</a><a data-id="{val.order_id}" data-mobile={val.tutor_mobile}" href="javascript:;" data-status="7" class="order_btn">拒绝</a>
+			{else}
+				<a data-id="{val.order_id}" data-mobile="{val.stu_mobile}" href="javascript:;" data-status="6" class="order_btn">取消退款</a>
+			{/if}
+		{else if val.status == 6}
+			{if type == 1}
+			<a href="/H5/Comment/tutorCheckCom/stu_id/{val.stu_id}/tutor_id/{val.tutor_id}/order_id/{val.order_id}">查看点评</a><a href="/H5/Comment/tutorComIndex/stu_id/{val.stu_id}/tutor_id/{val.tutor_id}/order_id/{val.order_id}" class="">评价学员</a>
+			{else}
+			<a href="/H5/Comment/stuComIndex/stu_id/{val.stu_id}/tutor_id/{val.tutor_id}/tutor_name/{val.tutor_name}/amount/{val.amount}/order_id/{val.order_id}" class="">点评</a><a href="/H5/Comment/stuCheckCom/stu_id/{val.stu_id}/tutor_id/{val.tutor_id}/order_id/{val.order_id}" class="">牛人对我评论</a>
+			{/if}
+		{else}
+		{/if}
+		￥{val.amount}
+	</div>
+</dd>
+{/each}

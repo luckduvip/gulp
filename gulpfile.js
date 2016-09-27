@@ -28,7 +28,7 @@ var gulp = require('gulp')
 				,output_folder : "js/min"
 			}
 			,watch : {
-				watchList : ["tmod/tpl/**/*.*","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
+				watchList : ["tmod/tpl/**/*.html","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
 				,callbackList : [
 					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo" }
 					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo" }
@@ -54,7 +54,7 @@ var gulp = require('gulp')
 				,output_folder : "js/min"
 			}
 			,watch : {
-				watchList : ["tmod/tpl/**/*.*","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
+				watchList : ["tmod/tpl/**/*.html","tmod/myHelp.js","scss/","scss/**/*.*","js/lib/*.*","js/tools/**/*.js","js/htmls/**/*.*"]
 				,callbackList : [
 					{ key : /tmod\/myHelp\.js/i , callback : "project" , params : "mogo_h5" }
 					,{ key : /tmod\/tpl/i , callback : "project" , params : "mogo_h5" }
@@ -191,6 +191,7 @@ gulp.task("sassFile",function(){
 })
 gulp.task('myWatch',function(){
 	var project_name = getProjectName('fileurl'),_watch_config = config[project_name].watch;
+	console.log(project_name,".......");
 	for(var i =0;i<_watch_config.watchList.length;i++){
 		_watch_config.watchList[i] = baseUrl[project_name]+ _watch_config.watchList[i];
 	}
@@ -209,7 +210,6 @@ gulp.task('myWatch',function(){
 })
 gulp.task('_jshint',function(_projectName){ 
 	var project_name = getProjectName("fileurl");
-	console.log(project_name);
 	gulp.tasks["project_jshint"].fn(baseUrl[project_name],config[project_name].js);
 })
 gulp.task('project',function(_projectName){ 
@@ -218,9 +218,6 @@ gulp.task('project',function(_projectName){
 	}else{
 		project_name = getProjectName("fileurl");
 	}
-	/*
-	 *gulp.tasks["project_jshint"].fn(baseUrl[project_name],config[project_name].js);
-	 */
 	gulp.tasks["project_javascripts"].fn(baseUrl[project_name],config[project_name].js);
 	gulp.tasks["project_scss"].fn(baseUrl[project_name],config[project_name].scss);
 	gulp.tasks["project_tmod"].fn(baseUrl[project_name],config[project_name].tmod);
