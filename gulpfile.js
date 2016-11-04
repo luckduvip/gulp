@@ -157,7 +157,7 @@ gulp.task("project_scss",function(url,config){
 		.pipe(gulp.dest(url+config.output_folder));
 })
 gulp.task("uglifyFile",function(){
-	var url = getProjectName("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
+	var url = getInputParams("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
 	/*
 	 *console.log(url,output);
 	 */
@@ -182,15 +182,25 @@ gulp.task("sass",function(){
 });
 //替换时间戳,替换单个文件
 gulp.task("replaceFile",function(){
-	var url = getProjectName("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
+	var url = getInputParams("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
 	return gulp.src(url)
 		.pipe(replace(/(\.(?:jpg|png|gif)\?)(\d+)/g,"$1"+Date.now()))
 		.pipe(gulp.dest(output));
+});
+//替换时间戳,替换项目
+gulp.task("replaceAll",function(){
+	var url = getInputParams("fileurl"),
+	key = getInputParams("key"),
+	val = getInputParams("val");
+	return gulp.src([url+"**/*.js",url+"**/*.html",url+"**/*.scss"])
+		.pipe(replace(key,val))
+		.pipe(gulp.dest(url));
 })
 //替换时间戳,替换项目
 gulp.task("replace",function(){
-	var url = getProjectName("fileurl");
-	return gulp.src([url+"**/*.js",url+"**/*.html",url+"**/*.scss",url+"**/*.css"])
+	var url = getInputParams("fileurl");
+	console.error(url);
+	return gulp.src([url+"**/*.js",url+"**/*.html",url+"**/*.scss"])
 		.pipe(replace(/(\.(?:jpg|png|gif)\?)(\d+)/g,"$1"+Date.now()))
 		.pipe(gulp.dest(url));
 })
@@ -205,7 +215,7 @@ gulp.task("uglify",function(){
 		.pipe(gulp.dest(gulp.info.baseUrl+gulp.info.js.output));
 })
 gulp.task("sassFile",function(){
-	var url = getProjectName("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
+	var url = getInputParams("fileurl"),output = url.substring(0,url.lastIndexOf("\/")+1);
 	return gulp.src(url)
 		.pipe(sourcemaps.init({loadMaps:true}))
 		.pipe(sass({outputStyle:'compressed'}).on('error',sass.logError))
@@ -216,8 +226,8 @@ gulp.task("sassFile",function(){
 		.pipe(gulp.dest(output));
 })
 gulp.task('myWatch',function(){
-	var project_name = getProjectName('fileurl'),_watch_config = config[project_name].watch;
-	console.log(project_name,".......");
+	var project_name = getInputParams('fileurl'),_watch_config = config[project_name].watch;
+	console.log(project_name,baseUrl[project_name]);
 	for(var i =0;i<_watch_config.watchList.length;i++){
 		_watch_config.watchList[i] = baseUrl[project_name]+ _watch_config.watchList[i];
 	}
@@ -235,21 +245,21 @@ gulp.task('myWatch',function(){
 	})
 })
 gulp.task('_jshint',function(_projectName){ 
-	var project_name = getProjectName("fileurl");
+	var project_name = getInputParams("fileurl");
 	gulp.tasks["project_jshint"].fn(baseUrl[project_name],config[project_name].js);
 })
 gulp.task('project',function(_projectName){ 
 	if(_projectName && !(_projectName instanceof Function)){
 		var project_name = _projectName;
 	}else{
-		project_name = getProjectName("fileurl");
+		project_name = getInputParams("fileurl");
 	}
 	gulp.tasks["project_javascripts"].fn(baseUrl[project_name],config[project_name].js);
 	gulp.tasks["project_scss"].fn(baseUrl[project_name],config[project_name].scss);
 	gulp.tasks["project_tmod"].fn(baseUrl[project_name],config[project_name].tmod);
 	return;
 });
-var getProjectName = function(args){
+var getInputParams = function(args){
 	return minimist(process.argv.slice(2),args)[args];
 },getParams = function(){
 	console.log(minimist(process.argv.slice(2)));
